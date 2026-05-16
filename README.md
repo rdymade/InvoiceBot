@@ -60,7 +60,7 @@ Create a `.env` file or export these environment variables:
 ```bash
 export DISCORD_BOT_TOKEN="your-bot-token-here"
 export SPREADSHEET_ID="your-sheet-id-here"
-export GOOGLE_CREDENTIALS_PATH="./credentials.json"
+export GOOGLE_CREDENTIALS_PATH="./app/credentials.json"
 export COMMAND_PREFIX="!"
 export ALLOWED_USER_IDS="123456789012345678,987654321098765432"
 ```
@@ -101,6 +101,45 @@ docker run \
   invoicebot
 ```
 
+### Using Docker Compose (recommended)
+
+The easiest way to run the bot with Docker is using `docker-compose.yaml`:
+
+1. Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+2. Edit `.env` with your configuration:
+
+```bash
+DISCORD_BOT_TOKEN="your-bot-token"
+SPREADSHEET_ID="your-spreadsheet-id"
+COMMAND_PREFIX="!"
+ALLOWED_USER_IDS="123456789012345678,987654321098765432"
+```
+
+3. Ensure `credentials.json` is in the project root (same directory as `docker-compose.yaml`).
+
+4. Run the bot:
+
+```bash
+docker-compose up -d
+```
+
+View logs:
+
+```bash
+docker-compose logs -f invoicebot
+```
+
+Stop the bot:
+
+```bash
+docker-compose down
+```
+
 ### GitHub automated Docker build
 
 1. Create a GitHub repository and push this code.
@@ -126,14 +165,14 @@ If you want to deploy the bot to your server, pull the image and run it with the
 
 ### Invoices Sheet
 
-Create a sheet named "Invoices" with columns like:
+Create a sheet named "Farm_list" with columns like:
 
-| Invoice ID | Client | Amount | Date | Status |
-|------------|--------|--------|------|--------|
-| INV-001 | Acme Corp | $1,000 | 2024-01-15 | Paid |
-| INV-002 | Tech Ltd | $2,500 | 2024-01-20 | Pending |
+| Main | Director | Paying Character | System | Comment | Status | Type | Amount |
+|------|----------|------------------|--------|---------|--------|------|--------|
+| Char1 | Holding Char | Knecht1 | Jita | Inhabitant A,B,C | x | HS | 1000000000 |
+| Char2 | Holding Char2 | Knecht2 | Amarr | Inhabitant D,F,G |  | HS | 1000000000 |
 
-The bot will fetch these rows and format them into Discord messages.
+The bot will fetch these rows and format them into Discord messages, only if the status is not empty.
 
 ## Project Structure
 
@@ -159,6 +198,8 @@ The bot loads configuration from environment variables:
 | `GOOGLE_CREDENTIALS_PATH` | Path to credentials.json | `./credentials.json` |
 | `COMMAND_PREFIX` | Command prefix character | `!` |
 | `ALLOWED_USER_IDS` | Comma-separated list of Discord user IDs allowed to issue commands | - |
+| `INVOICE_SHEET_NAME` | Name of the sheet to fetch invoice data from | - |
+| `INVOICE_RANGE` | Cell range for invoice data (e.g., 'E2:L') | - |
 
 ## Error Handling
 
