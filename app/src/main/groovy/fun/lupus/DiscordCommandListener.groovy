@@ -54,7 +54,17 @@ class DiscordCommandListener extends ListenerAdapter {
 
     private void handleInvoiceCommand(MessageReceivedEvent event, String[] args) {
         try {
-            String suffix = args.size() > 1 ? args.drop(1).join(' ') : ''
+            if (args.size() != 2) {
+                event.channel.sendMessage("Usage: `${commandPrefix}invoice YYYY-MM`").queue()
+                return
+            }
+
+            String suffix = args[1]?.trim()
+            if (!suffix || !(suffix ==~ /^\d{4}-\d{2}$/)) {
+                event.channel.sendMessage("Suffix is required and must be in format YYYY-MM. Example: `${commandPrefix}invoice 2026-05`").queue()
+                return
+            }
+
             def invoiceData = sheetsService.fetchRange("'$invoiceSheetName'!$invoiceRange")
 
             if (invoiceData.isEmpty()) {
