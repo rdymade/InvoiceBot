@@ -1,0 +1,9 @@
+build/
+.gradle/
+.gradle-cache/
+**/build/
+**/.gradle/
+**/.git/
+*.log
+credentials.json
+*.iml
