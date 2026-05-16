@@ -16,8 +16,4 @@ WORKDIR /app
 
 COPY --from=builder /workspace/app/build/install/app /app
 
-# Optional defaults - override at runtime.
-ENV GOOGLE_CREDENTIALS_PATH="/app/credentials.json"
-ENV COMMAND_PREFIX="!"
-
 ENTRYPOINT ["./bin/app"]
