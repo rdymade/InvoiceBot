@@ -35,4 +35,20 @@ class BotConfig {
         }
         return raw.split(',').collect { it.trim() }.findAll { it }.toSet()
     }
+
+    static String getInvoiceSheetName() {
+        String sheetName = System.getenv('INVOICE_SHEET_NAME')
+        if (!sheetName) {
+            throw new IllegalStateException('INVOICE_SHEET_NAME environment variable is not set')
+        }
+        return sheetName
+    }
+
+    static String getInvoiceRange() {
+        String range = System.getenv('INVOICE_RANGE')
+        if (!range) {
+            throw new IllegalStateException('INVOICE_RANGE environment variable is not set')
+        }
+        return range
+    }
 }

@@ -10,11 +10,15 @@ class DiscordCommandListener extends ListenerAdapter {
     private GoogleSheetsService sheetsService
     private String commandPrefix
     private Set<String> allowedUserIds
+    private String invoiceSheetName
+    private String invoiceRange
 
-    DiscordCommandListener(GoogleSheetsService sheetsService, String commandPrefix = '!', Set<String> allowedUserIds = [] as Set) {
+    DiscordCommandListener(GoogleSheetsService sheetsService, String commandPrefix = '!', Set<String> allowedUserIds = [] as Set, String invoiceSheetName = 'Farm_list', String invoiceRange = 'E2:L') {
         this.sheetsService = sheetsService
         this.commandPrefix = commandPrefix
         this.allowedUserIds = allowedUserIds
+        this.invoiceSheetName = invoiceSheetName
+        this.invoiceRange = invoiceRange
     }
 
     @Override
@@ -51,7 +55,7 @@ class DiscordCommandListener extends ListenerAdapter {
     private void handleInvoiceCommand(MessageReceivedEvent event, String[] args) {
         try {
             String suffix = args.size() > 1 ? args.drop(1).join(' ') : ''
-            def invoiceData = sheetsService.fetchRange("'Farm_list'!E2:L")
+            def invoiceData = sheetsService.fetchRange("'$invoiceSheetName'!$invoiceRange")
 
             if (invoiceData.isEmpty()) {
                 event.channel.sendMessage("No invoice data found in Google Sheets.").queue()

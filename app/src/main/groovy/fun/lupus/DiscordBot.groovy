@@ -11,12 +11,16 @@ class DiscordBot {
     private GoogleSheetsService sheetsService
     private String commandPrefix
     private Set<String> allowedUserIds
+    private String invoiceSheetName
+    private String invoiceRange
 
-    DiscordBot(String token, GoogleSheetsService sheetsService, String commandPrefix, Set<String> allowedUserIds) {
+    DiscordBot(String token, GoogleSheetsService sheetsService, String commandPrefix, Set<String> allowedUserIds, String invoiceSheetName = 'Farm_list', String invoiceRange = 'E2:L') {
         this.token = token
         this.sheetsService = sheetsService
         this.commandPrefix = commandPrefix
         this.allowedUserIds = allowedUserIds
+        this.invoiceSheetName = invoiceSheetName
+        this.invoiceRange = invoiceRange
     }
 
     void start() {
@@ -29,7 +33,7 @@ class DiscordBot {
                             GatewayIntent.GUILD_MESSAGES,
                             GatewayIntent.MESSAGE_CONTENT
                     )
-                    .addEventListeners(new DiscordCommandListener(sheetsService, commandPrefix, allowedUserIds))
+                    .addEventListeners(new DiscordCommandListener(sheetsService, commandPrefix, allowedUserIds, invoiceSheetName, invoiceRange))
                     .build()
 
             jda.awaitReady()

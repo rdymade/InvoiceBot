@@ -15,6 +15,8 @@ class App {
             String spreadsheetId = BotConfig.spreadsheetId
             String commandPrefix = BotConfig.commandPrefix
             Set<String> allowedUserIds = BotConfig.allowedUserIds
+            String invoiceSheetName = BotConfig.invoiceSheetName
+            String invoiceRange = BotConfig.invoiceRange
 
             println("Configuration loaded:")
             println("  Discord Token: ${discordToken ? 'Set' : 'NOT SET'}")
@@ -22,6 +24,8 @@ class App {
             println("  Spreadsheet ID: ${spreadsheetId ? 'Set' : 'NOT SET'}")
             println("  Command Prefix: $commandPrefix")
             println("  Allowed users: ${allowedUserIds.size()}")
+            println("  Invoice Sheet: $invoiceSheetName")
+            println("  Invoice Range: $invoiceRange")
             println("=" * 50)
 
             // Initialize Google Sheets service
@@ -29,7 +33,7 @@ class App {
             println("✓ Google Sheets service initialized")
 
             // Initialize and start Discord bot
-            DiscordBot bot = new DiscordBot(discordToken, sheetsService, commandPrefix, allowedUserIds)
+            DiscordBot bot = new DiscordBot(discordToken, sheetsService, commandPrefix, allowedUserIds, invoiceSheetName, invoiceRange)
             bot.start()
 
         } catch (Exception e) {
