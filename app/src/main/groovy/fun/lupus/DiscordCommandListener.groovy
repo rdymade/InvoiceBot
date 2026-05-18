@@ -48,7 +48,8 @@ class DiscordCommandListener extends ListenerAdapter {
                 handleHelpCommand(event)
                 break
             default:
-                event.channel.sendMessage("Unknown command: `$command`. Type `${commandPrefix}help` for available commands.").queue()
+                // do nothing for unknown commands, or optionally send a message
+                // event.channel.sendMessage("Unknown command: `$command`. Type `${commandPrefix}help` for available commands.").queue()
         }
     }
 
@@ -100,7 +101,7 @@ class DiscordCommandListener extends ListenerAdapter {
                     reason = reason ? "${reason} ${suffix}" : suffix
                 }
 
-                def invoiceCommand = "/new_invoice character: ${character} amount: ${amount} reason: ${reason}"
+                def invoiceCommand = "!new_invoice character: ${character} amount: ${amount} reason: ${reason}"
                 event.channel.sendMessage(invoiceCommand).queue()
                 sentAny = true
             }
