@@ -87,7 +87,7 @@ class DiscordCommandListener extends ListenerAdapter {
                     continue
                 }
 
-                def character = row.size() > 0 ? row[0]?.toString()?.trim() : ''
+                def character = row.size() > 2 ? row[2]?.toString()?.trim() : ''
                 def reasonBase = row.size() > 3 ? row[3]?.toString()?.trim() : ''
                 def amount = row.size() > 7 ? row[7]?.toString()?.trim() : ''
 
