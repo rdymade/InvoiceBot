@@ -1,12 +1,17 @@
-# InvoiceBot - Discord Bot with Google Sheets Integration
+# InvoiceBot - Discord Bot with Google Sheets Integration for Alliance Auth
 
 A Discord bot built with Groovy/Java that fetches data from Google Sheets and responds to commands with formatted messages.
+
+The bot relies on two important changes made to the alliance auth discord bot and invoices plugins, see the following repositories for the changes:
+https://github.com/rdymade/allianceauth-discordbot
+https://github.com/rdymade/allianceauth-invoice-manager
 
 ## Features
 
 - 🤖 Discord command handling with custom prefix
 - 📊 Google Sheets integration for data fetching
 - 📄 Automatic formatting of spreadsheet data into Discord messages
+- ⌚ Automated sending of invoices on the 1st of each month
 - 🔐 Secure authentication using Google Service Accounts
 - ⚙️ Environment-based configuration
 
@@ -200,6 +205,7 @@ The bot loads configuration from environment variables:
 | `ALLOWED_USER_IDS` | Comma-separated list of Discord user IDs allowed to issue commands | - |
 | `INVOICE_SHEET_NAME` | Name of the sheet to fetch invoice data from | - |
 | `INVOICE_RANGE` | Cell range for invoice data (e.g., 'E2:L') | - |
+| `DEFAULT_CHANNEL_ID` | Default channel for automated invoicing | - |
 
 ## Error Handling
 

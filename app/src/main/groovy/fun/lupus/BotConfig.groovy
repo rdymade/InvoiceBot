@@ -51,4 +51,12 @@ class BotConfig {
         }
         return range
     }
+
+    static String getDefaultChannelId() {
+        String channelId = System.getenv('DEFAULT_CHANNEL_ID')
+        if (!channelId) {
+            throw new IllegalStateException('DEFAULT_CHANNEL_ID environment variable is not set')
+        }
+        return channelId
+    }
 }
