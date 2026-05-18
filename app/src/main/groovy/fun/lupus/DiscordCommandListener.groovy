@@ -47,8 +47,8 @@ class DiscordCommandListener extends ListenerAdapter {
             case 'help':
                 handleHelpCommand(event)
                 break
-            default:
-                // do nothing for unknown commands, or optionally send a message
+            // do nothing for unknown commands, or optionally send a message
+            //default:
                 // event.channel.sendMessage("Unknown command: `$command`. Type `${commandPrefix}help` for available commands.").queue()
         }
     }
