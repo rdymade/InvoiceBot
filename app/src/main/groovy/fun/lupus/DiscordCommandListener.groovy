@@ -101,7 +101,7 @@ class DiscordCommandListener extends ListenerAdapter {
                     reason = reason ? "${reason} ${suffix}" : suffix
                 }
 
-                def invoiceCommand = "!new_invoice character: ${character} amount: ${amount} reason: ${reason}"
+                def invoiceCommand = "!new_invoice ${character} ${amount} ${reason}"
                 event.channel.sendMessage(invoiceCommand).queue()
                 sentAny = true
             }
