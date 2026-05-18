@@ -56,6 +56,7 @@ class DiscordBot {
             // Initialize time-based automation
             if (defaultChannelId) {
                 initializeAutomation()
+                sendStartupMessage()
             } else {
                 println("⚠️  DEFAULT_CHANNEL_ID not set - time-based automation disabled")
             }
@@ -203,7 +204,61 @@ class DiscordBot {
         }
     }
 
+    private void sendStartupMessage() {
+        try {
+            def channel = jda.getTextChannelById(defaultChannelId)
+            if (!channel) {
+                System.err.println("Default channel with ID $defaultChannelId not found")
+                return
+            }
+            
+            def startupMessage = """
+            ✅ **InvoiceBot Started**
+            
+            The bot is now online and ready to process commands.
+            Automated invoice generation and reminders are enabled.
+            """.stripIndent()
+            
+            channel.sendMessage(startupMessage).queue()
+            println("✓ Startup message sent")
+            
+        } catch (Exception e) {
+            System.err.println("Error sending startup message: ${e.message}")
+            e.printStackTrace()
+        }
+    }
+
+    private void sendShutdownMessage() {
+        try {
+            def channel = jda.getTextChannelById(defaultChannelId)
+            if (!channel) {
+                System.err.println("Default channel with ID $defaultChannelId not found")
+                return
+            }
+            
+            def shutdownMessage = """
+            ⏹️ **InvoiceBot Shutting Down**
+            
+            The bot is going offline. Automated tasks are suspended.
+            """.stripIndent()
+            
+            channel.sendMessage(shutdownMessage).queue()
+            println("✓ Shutdown message sent")
+            
+            // Wait a bit for the message to be sent
+            Thread.sleep(1000)
+            
+        } catch (Exception e) {
+            System.err.println("Error sending shutdown message: ${e.message}")
+            e.printStackTrace()
+        }
+    }
+
     void shutdown() {
+        if (defaultChannelId) {
+            sendShutdownMessage()
+        }
+        
         if (scheduler) {
             scheduler.shutdown()
             try {
