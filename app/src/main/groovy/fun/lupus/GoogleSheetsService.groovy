@@ -12,25 +12,34 @@ import java.net.URLEncoder
  */
 class GoogleSheetsService {
     private String spreadsheetId
+    private String credentialsPath
+    private ServiceAccountCredentials credentials
     private String accessToken
     private static final String SHEETS_API_URL = 'https://sheets.googleapis.com/v4/spreadsheets'
 
     GoogleSheetsService(String credentialsPath, String spreadsheetId) {
         this.spreadsheetId = spreadsheetId
-        this.accessToken = getAccessToken(credentialsPath)
+        this.credentialsPath = credentialsPath
+        this.credentials = loadCredentials(credentialsPath)
+        refreshAccessToken()
     }
 
-    private String getAccessToken(String credentialsPath) {
+    private ServiceAccountCredentials loadCredentials(String credentialsPath) {
         try {
-            def credentials = ServiceAccountCredentials
+            return ServiceAccountCredentials
                     .fromStream(new FileInputStream(credentialsPath))
                     .createScoped(['https://www.googleapis.com/auth/spreadsheets.readonly'])
-
-            // Get access token from credentials
-            credentials.refresh()
-            return credentials.accessToken.tokenValue
         } catch (Exception e) {
-            throw new RuntimeException("Failed to get access token: ${e.message}", e)
+            throw new RuntimeException("Failed to load credentials: ${e.message}", e)
+        }
+    }
+
+    private void refreshAccessToken() {
+        try {
+            credentials.refresh()
+            this.accessToken = credentials.accessToken.tokenValue
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to refresh access token: ${e.message}", e)
         }
     }
 
@@ -41,6 +50,9 @@ class GoogleSheetsService {
      */
     List<List<Object>> fetchData(String range) {
         try {
+            // Refresh token before each API call
+            refreshAccessToken()
+            
             String url = "${SHEETS_API_URL}/${spreadsheetId}/values/${URLEncoder.encode(range, 'UTF-8')}"
 
             def connection = new URL(url).openConnection() as HttpURLConnection
@@ -87,4 +99,3 @@ class GoogleSheetsService {
         return fetchData(range)
     }
 }
-
